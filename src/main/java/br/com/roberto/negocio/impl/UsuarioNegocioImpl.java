@@ -1,20 +1,17 @@
 package br.com.roberto.negocio.impl;
 
-import br.com.roberto.dao.UsuarioDao;
+import br.com.roberto.controller.dto.UsuarioDTO;
+import br.com.roberto.dao.UsuarioDaoImpl;
 import br.com.roberto.excecao.DadosDoUsuarioMalFormadosException;
 import br.com.roberto.excecao.DadosNaoEncontradosException;
-import br.com.roberto.hateos.MensagensHateos;
-import br.com.roberto.model.UsuarioModel;
+import br.com.roberto.model.Usuario;
 import br.com.roberto.negocio.UsuarioNegocio;
 import org.apache.commons.beanutils.BeanUtils;
 
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +26,7 @@ import java.util.List;
 public class UsuarioNegocioImpl implements UsuarioNegocio {
 
 	@Inject
-	private UsuarioDao usuarioDao;
+	private UsuarioDaoImpl usuarioDao;
 
 	/**
 	 * @param inicio
@@ -39,15 +36,20 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public List<UsuarioModel> listarUsuarios(int inicio, int tamanho) throws DadosNaoEncontradosException{
+	public List<UsuarioDTO> listarUsuarios(int inicio, int tamanho) throws DadosNaoEncontradosException{
 
-		List<UsuarioModel> todosUsuarios = usuarioDao.buscaTodos(inicio, tamanho);
+		List<Usuario> todosUsuarios = usuarioDao.buscaTodos(inicio, tamanho);
 
 		if (todosUsuarios.size() == 0) {
 			throw new DadosNaoEncontradosException("Não foram encontrados informações para os parâmetros de usuário fornecidos.");
 		}
 
-		return todosUsuarios;
+		List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+
+		todosUsuarios.forEach(
+				usuario -> usuariosDTO.add(new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getUsuario())));
+
+		return usuariosDTO;
 
 	}
 
@@ -57,12 +59,12 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public UsuarioModel listaPorId(Long id) {
-		UsuarioModel usuario = usuarioDao.buscaPorId(id);
+	public UsuarioDTO listaPorId(Long id) {
+		Usuario usuario = usuarioDao.buscaPorId(id);
 		if (usuario == null) {
 			throw new DadosNaoEncontradosException("O Usuário com ID "+id+" Não foi encontrado !");
 		}
-		return usuario;
+		return new UsuarioDTO(usuario.getId(),usuario.getNome(),usuario.getUsuario());
 	}
 
 	/**
@@ -70,9 +72,10 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	 * @return
 	 */
 	@Override
-	public UsuarioModel adiciona(UsuarioModel usuario) {
+	public UsuarioDTO adiciona(Usuario usuario) {
 		this.verificaCamposObrigatorios(usuario);
-		return usuarioDao.save(usuario);
+		Usuario usuarioInterno = usuarioDao.salvar(usuario);
+		return new UsuarioDTO(usuarioInterno.getId(), usuarioInterno.getNome(), usuarioInterno.getUsuario());
 	}
 
 	/**
@@ -81,9 +84,9 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	 * @return
 	 */
 	@Override
-	public UsuarioModel atualiza(Long id, UsuarioModel usuario) {
+	public UsuarioDTO atualiza(Long id, Usuario usuario) {
 		this.verificaCamposObrigatorios(usuario);
-		UsuarioModel usuarioInterno = usuarioDao.buscaPorId(id);
+		Usuario usuarioInterno = usuarioDao.buscaPorId(id);
 
 		if (usuarioInterno==null){
 			throw new DadosNaoEncontradosException("O Usuário Pesquisado "+usuario+" não foi encontrado !");
@@ -93,11 +96,11 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 			BeanUtils.copyProperties(usuarioInterno,usuario);
 			usuarioInterno.setId(id);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new  RuntimeException(e.getCause()+"-"+e.getMessage());
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			throw new  RuntimeException(e.getCause()+"-"+e.getMessage());
 		}
-		return usuarioDao.save(usuarioInterno);
+		return new UsuarioDTO(usuarioInterno.getId(), usuarioInterno.getNome(), usuarioInterno.getUsuario());
 
 	}
 
@@ -108,7 +111,7 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	@Override
 
 	public boolean remove(Long id) {
-		UsuarioModel usuarioInterno = usuarioDao.buscaPorId(id);
+		Usuario usuarioInterno = usuarioDao.buscaPorId(id);
 		if (usuarioInterno==null){
 			throw new DadosNaoEncontradosException("O Usuário Pesquisado "+usuarioInterno+" não foi encontrado !");
 		}
@@ -119,7 +122,7 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	/**
 	 * @param usuario
 	 */
-	private void verificaCamposObrigatorios(UsuarioModel usuario) {
+	private void verificaCamposObrigatorios(Usuario usuario) {
 		if (usuario.getNome()==null){
 			throw new DadosDoUsuarioMalFormadosException("O nome do Usuário é um campo obrigatório!");
 		}

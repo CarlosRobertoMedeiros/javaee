@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario", schema = "sistemab")
-public class UsuarioModel {
+public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +31,10 @@ public class UsuarioModel {
 	private List<Link> links = new ArrayList<>(); //Mover para o DTO
 
 
-	public UsuarioModel() {
+	public Usuario() {
 		}
 
-	public UsuarioModel(Long codUsuario, String nome, String usuario, String senha) {
+	public Usuario(Long codUsuario, String nome, String usuario, String senha) {
 			super();
 			this.codUsuario = codUsuario;
 			this.nome = nome;
@@ -98,7 +98,7 @@ public class UsuarioModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UsuarioModel other = (UsuarioModel) obj;
+		Usuario other = (Usuario) obj;
 		if (codUsuario == null) {
 			if (other.codUsuario != null)
 				return false;

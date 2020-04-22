@@ -104,6 +104,9 @@
 		<javaee-api-version>7.0</javaee-api-version>
 		<swagger-jaxrs-version>1.6.0</swagger-jaxrs-version>
 		<commons-beanutils-version>1.9.4</commons-beanutils-version>
+		<junit-version>4.12</junit-version>
+
+		<mockito-all-version>1.10.19</mockito-all-version>
 	</properties>
 	
 
@@ -125,6 +128,15 @@
 			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+		</dependency>
 
 	</dependencies>
 
@@ -153,6 +165,21 @@
 				<scope>compile</scope>
 			</dependency>
 
+			<!-- https://mvnrepository.com/artifact/junit/junit -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit-version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${mockito-all-version}</version>
+				<scope>test</scope>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>

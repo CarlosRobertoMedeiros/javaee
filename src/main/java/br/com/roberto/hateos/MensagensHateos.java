@@ -1,8 +1,8 @@
 package br.com.roberto.hateos;
 
-import br.com.roberto.model.UsuarioModel;
+import br.com.roberto.controller.dto.UsuarioDTO;
+import br.com.roberto.model.Usuario;
 
-import javax.ws.rs.BeanParam;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 
 
 public class MensagensHateos {
-    public UsuarioModel acoesHateosParaUsuario(UriInfo uriInfo, UsuarioModel usuario) {
+    public UsuarioDTO acoesHateosParaUsuario(UriInfo uriInfo, UsuarioDTO usuario) {
 
         usuario.addLink(this.getUriForSelf(uriInfo, usuario), "listarPorId");
         usuario.addLink(this.getUriAdicionarTodos(uriInfo), "adicionar");
@@ -23,7 +23,7 @@ public class MensagensHateos {
         return usuario;
     }
 
-    public UsuarioModel acoesHateosParaEdicaoUsuario(UriInfo uriInfo, UsuarioModel usuario) {
+    public UsuarioDTO acoesHateosParaEdicaoUsuario(UriInfo uriInfo, UsuarioDTO usuario) {
 
         usuario.addLink(this.getUriForSelfEdicao(uriInfo, usuario), "listarPorId");
         usuario.addLink(this.getUriForAdicionarEdicao(uriInfo), "adicionar");
@@ -33,7 +33,7 @@ public class MensagensHateos {
         return usuario;
     }
 
-    public UsuarioModel acoesHateosParaInsercao(UriInfo uriInfo, UsuarioModel usuario) {
+    public UsuarioDTO acoesHateosParaInsercao(UriInfo uriInfo, UsuarioDTO usuario) {
 
         usuario.addLink(this.getUriForSelfInsercao(uriInfo, usuario), "listarPorId");
         usuario.addLink(this.getUriForAdicionarInsercao(uriInfo), "adicionar");
@@ -43,13 +43,13 @@ public class MensagensHateos {
         return usuario;
     }
 
-    private String getUriForAlterarInsercao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForAlterarInsercao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+usuario.getId()).build()
                 .toString();
         return uri;
     }
 
-    private String getUriForExcluirInsercao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForExcluirInsercao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+usuario.getId()).build()
                 .toString();
         return uri;
@@ -62,7 +62,7 @@ public class MensagensHateos {
 
     }
 
-    private String getUriForSelfInsercao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForSelfInsercao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+usuario.getId()).build()
                 .toString();
 
@@ -72,13 +72,13 @@ public class MensagensHateos {
 
 
 
-    private String getUriForAlterarEdicao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForAlterarEdicao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()).build()
                 .toString();
         return uri;
     }
 
-    private String getUriForExcluirEdicao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForExcluirEdicao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()).build()
                 .toString();
         return uri;
@@ -92,14 +92,14 @@ public class MensagensHateos {
         return uri;
     }
 
-    private String getUriForSelfEdicao(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForSelfEdicao(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()).build()
                 .toString();
 
         return uri;
     }
 
-    public UsuarioModel acoesHateosParaExcluir(UriInfo uriInfo, UsuarioModel usuario) {
+    public UsuarioDTO acoesHateosParaExcluir(UriInfo uriInfo, UsuarioDTO usuario) {
         usuario.addLink(this.getUriForAdicionar(uriInfo), "adicionar");
         usuario.addLink(this.getUriForListarTodos(uriInfo), "listarTodos", "Atenção a Paginação");
         return usuario;
@@ -107,7 +107,7 @@ public class MensagensHateos {
 
 
 
-    private String getUriForSelf(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForSelf(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+"/"+usuario.getId()).build()
                 .toString();
 
@@ -128,13 +128,13 @@ public class MensagensHateos {
         return uri;
     }
 
-    private String getUriForExcluir(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForExcluir(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+"/"+usuario.getId()).build()
                 .toString();
         return uri;
     }
 
-    private String getUriForAlterar(UriInfo uriInfo, UsuarioModel usuario) {
+    private String getUriForAlterar(UriInfo uriInfo, UsuarioDTO usuario) {
         String uri = uriInfo.getBaseUriBuilder().path(uriInfo.getPath()+"/"+usuario.getId()).build()
                 .toString();
         return uri;

@@ -1,8 +1,9 @@
 package br.com.roberto.controller;
 
 import br.com.roberto.controller.bean.UsuarioFilterBean;
+import br.com.roberto.controller.dto.UsuarioDTO;
 import br.com.roberto.hateos.MensagensHateos;
-import br.com.roberto.model.UsuarioModel;
+import br.com.roberto.model.Usuario;
 import br.com.roberto.negocio.UsuarioNegocio;
 import io.swagger.annotations.*;
 
@@ -40,9 +41,9 @@ public class UsuarioController {
 			@ApiResponse(code = 204, message = "Sucesso")
 	})
 	public Response listarUsuarios(@BeanParam UsuarioFilterBean filterBean, @Context UriInfo uriInfo) {
-		List<UsuarioModel> usuarios = usuarioNegocio.listarUsuarios(filterBean.getInicio(), filterBean.getTamanho());
+		List<UsuarioDTO> usuarios = usuarioNegocio.listarUsuarios(filterBean.getInicio(), filterBean.getTamanho());
 
-		List<UsuarioModel> todosUsuariosComHateos = new ArrayList<>();
+		List<UsuarioDTO> todosUsuariosComHateos = new ArrayList<>();
 		mensagensHateos = new MensagensHateos();
 
 		usuarios.forEach(usuarioInterno ->{
@@ -67,7 +68,7 @@ public class UsuarioController {
 							   @PathParam("id") Long id, @Context UriInfo uriInfo) {
 
 			mensagensHateos = new MensagensHateos();
-			UsuarioModel usuario = usuarioNegocio.listaPorId(id);
+			UsuarioDTO usuario = usuarioNegocio.listaPorId(id);
 			mensagensHateos.acoesHateosParaEdicaoUsuario(uriInfo,usuario);
 
 			return Response
@@ -81,10 +82,10 @@ public class UsuarioController {
 			@ApiResponse(code = 200, message = "Sucesso"),
 			@ApiResponse(code = 204, message = "Sucesso")
 	})
-	public Response adicionarUsuario(@ApiParam(required = true) UsuarioModel usuario, @Context UriInfo uriInfo) {
+	public Response adicionarUsuario(@ApiParam(required = true) Usuario usuario, @Context UriInfo uriInfo) {
 
 		mensagensHateos = new MensagensHateos();
-		UsuarioModel novoUsuario = usuarioNegocio.adiciona(usuario);
+		UsuarioDTO novoUsuario = usuarioNegocio.adiciona(usuario);
 		mensagensHateos.acoesHateosParaInsercao(uriInfo,novoUsuario);
 
 		return Response
@@ -100,10 +101,10 @@ public class UsuarioController {
 			@ApiResponse(code = 200, message = "Sucesso"),
 			@ApiResponse(code = 404, message = "Sucesso")
 	})
-	public Response atualizarUsuario(@ApiParam(required = true) @PathParam("id") Long id,  UsuarioModel usuario, @Context UriInfo uriInfo){
+	public Response atualizarUsuario(@ApiParam(required = true) @PathParam("id") Long id, Usuario usuario, @Context UriInfo uriInfo){
 
 		mensagensHateos = new MensagensHateos();
-		UsuarioModel usuarioAtualizado = usuarioNegocio.atualiza(id, usuario);
+		UsuarioDTO usuarioAtualizado = usuarioNegocio.atualiza(id, usuario);
 		mensagensHateos.acoesHateosParaEdicaoUsuario(uriInfo,usuarioAtualizado);
 
 		return Response
@@ -124,7 +125,7 @@ public class UsuarioController {
 
 		if (foiRemovido){
 			mensagensHateos = new MensagensHateos();
-			UsuarioModel usuario = mensagensHateos.acoesHateosParaExcluir(uriInfo, new UsuarioModel());
+			UsuarioDTO usuario = mensagensHateos.acoesHateosParaExcluir(uriInfo, new UsuarioDTO());
 			return Response
 					.status(Status.OK)
 					.entity(usuario)

@@ -4,18 +4,19 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import br.com.roberto.model.UsuarioModel;
+import br.com.roberto.controller.dto.UsuarioDTO;
+import br.com.roberto.model.Usuario;
 
 @Local
 public interface UsuarioNegocio{
 
-	List<UsuarioModel> listarUsuarios(int inicio, int tamanho);
+	List<UsuarioDTO> listarUsuarios(int inicio, int tamanho);
 
-	UsuarioModel listaPorId(Long id);
+	UsuarioDTO listaPorId(Long id);
 
-	UsuarioModel adiciona(UsuarioModel usuario);
+	UsuarioDTO adiciona(Usuario usuario);
 
-	UsuarioModel atualiza(Long id, UsuarioModel usuario);
+	UsuarioDTO atualiza(Long id, Usuario usuario);
 
 	boolean remove(Long id);
 }
